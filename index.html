@@ -147,6 +147,15 @@ img{max-width:100%;height:auto;display:block}
 .dot.on{background:var(--amarelo);width:22px;border-radius:6px}
 .swipe-hint{text-align:center;font-size:.8rem;color:var(--txt-suave);margin:8px 0 0;opacity:.8}
 
+/* mini-slider dentro de cada combo */
+.combo-preview{margin:4px 0 18px}
+.combo-preview .sec-mini{margin-bottom:10px;font-size:.8rem;text-align:left;letter-spacing:1px}
+.combo-slider{padding:2px 2px 12px;gap:10px}
+.combo-slider .slide{flex:0 0 68%;border-width:2px;border-radius:14px}
+.combo-slider .slide img{aspect-ratio:3/4;object-fit:cover}
+.combo-slider .slide .tag{font-size:.76rem;padding:20px 10px 9px}
+.combo-preview .dots{margin-top:2px}
+
 
 .antes-depois{padding:26px 0 8px;background:linear-gradient(180deg,#080d33,#04061a)}
 .ad-grid{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
@@ -381,6 +390,21 @@ footer{background:#04061a;text-align:center;padding:20px 18px 90px;color:#5a6296
         <li>Bônus exclusivos surpresa</li>
         <li>Área de membros com <strong>12 meses</strong> de acesso</li>
       </ul>
+      <div class="combo-preview">
+        <p class="sec-mini">Veja o que vem nesse combo 👇</p>
+        <div class="slider combo-slider">
+          <div class="slide"><img loading="lazy" decoding="async" src="https://i.imgur.com/EREn7MZ.jpeg" alt="Jogador escalado para colorir"><div class="tag">⚽ Jogadores escalados</div></div>
+          <div class="slide"><img loading="lazy" decoding="async" src="https://i.imgur.com/7aWHnJr.jpeg" alt="Jogador escalado para colorir"><div class="tag">⚽ Jogadores escalados</div></div>
+          <div class="slide"><img loading="lazy" decoding="async" src="https://i.imgur.com/eJAOatS.jpeg" alt="Jogador escalado para colorir"><div class="tag">⚽ Jogadores escalados</div></div>
+          <div class="slide"><img loading="lazy" decoding="async" src="https://i.imgur.com/HXGqIjB.jpeg" alt="Jogador escalado para colorir"><div class="tag">⚽ Jogadores escalados</div></div>
+          <div class="slide"><img loading="lazy" decoding="async" src="https://i.imgur.com/h2G7GjK.jpeg" alt="Pôster exclusivo para colorir"><div class="tag">🖼️ Pôster exclusivo</div></div>
+          <div class="slide"><img loading="lazy" decoding="async" src="https://i.imgur.com/F814Uk1.jpeg" alt="Pôster exclusivo para colorir"><div class="tag">🖼️ Pôster exclusivo</div></div>
+          <div class="slide"><img loading="lazy" decoding="async" src="https://i.imgur.com/Hxzz34x.jpeg" alt="Pôster exclusivo para colorir"><div class="tag">🖼️ Pôster exclusivo</div></div>
+          <div class="slide"><img loading="lazy" decoding="async" src="https://i.imgur.com/ofGEDY1.jpeg" alt="Pôster exclusivo para colorir"><div class="tag">🖼️ Pôster exclusivo</div></div>
+          <div class="slide"><img loading="lazy" decoding="async" src="https://i.imgur.com/U5pxfC7.png" alt="Locais da Copa para colorir"><div class="tag">🏟️ Locais da Copa</div></div>
+        </div>
+        <div class="dots"></div>
+      </div>
       <div class="price-area">
         <div class="price-hexa"><span class="pfx">Em até 5X de</span><span class="pval">R$5,67</span></div>
         <div class="price-vista">ou R$24,90 <small>à vista — pagamento único</small></div>
@@ -396,6 +420,14 @@ footer{background:#04061a;text-align:center;padding:20px 18px 90px;color:#5a6296
         <li>Acesso por <strong>3 meses</strong></li>
         <li>7 dias de garantia</li>
       </ul>
+      <div class="combo-preview">
+        <p class="sec-mini">Veja o que vem nesse combo 👇</p>
+        <div class="slider combo-slider">
+          <div class="slide"><img loading="lazy" decoding="async" src="https://i.imgur.com/HXGqIjB.jpeg" alt="Página da Seleção para colorir"><div class="tag">⚽ Página da Seleção</div></div>
+          <div class="slide"><img loading="lazy" decoding="async" src="https://i.imgur.com/7aWHnJr.jpeg" alt="Página da Seleção para colorir"><div class="tag">⚽ Página da Seleção</div></div>
+        </div>
+        <div class="dots"></div>
+      </div>
       <div class="price-area">
         <div class="price-big">R$10,90 <small>à vista</small></div>
       </div>
@@ -492,23 +524,46 @@ footer{background:#04061a;text-align:center;padding:20px 18px 90px;color:#5a6296
 </footer>
 
 <script>
-// Slider dots
-const slider=document.getElementById('slider');
-const slides=slider.querySelectorAll('.slide');
-const dots=document.getElementById('dots');
-slides.forEach((_,i)=>{const d=document.createElement('div');d.className='dot'+(i===0?' on':'');dots.appendChild(d);});
-const dotEls=dots.querySelectorAll('.dot');
-let sliderTick=false;
-slider.addEventListener('scroll',()=>{
-  if(sliderTick)return;
-  sliderTick=true;
-  requestAnimationFrame(()=>{
-    const width=slides[0].offsetWidth+14;
-    const idx=width?Math.round(slider.scrollLeft/width):0;
-    dotEls.forEach((d,i)=>d.classList.toggle('on',i===idx));
-    sliderTick=false;
-  });
-},{passive:true});
+// Slider dots (funciona para todos os sliders da página)
+document.querySelectorAll('.slider').forEach(slider=>{
+  const slides=slider.querySelectorAll('.slide');
+  const dots=slider.parentElement.querySelector('.dots');
+  if(!dots||!slides.length)return;
+  slides.forEach((_,i)=>{const d=document.createElement('div');d.className='dot'+(i===0?' on':'');dots.appendChild(d);});
+  const dotEls=dots.querySelectorAll('.dot');
+  const gap=parseInt(getComputedStyle(slider).columnGap)||14;
+  let tick=false;
+  slider.addEventListener('scroll',()=>{
+    if(tick)return;
+    tick=true;
+    requestAnimationFrame(()=>{
+      const width=slides[0].offsetWidth+gap;
+      const idx=width?Math.round(slider.scrollLeft/width):0;
+      dotEls.forEach((d,i)=>d.classList.toggle('on',i===idx));
+      tick=false;
+    });
+  },{passive:true});
+});
+
+// Autoplay do slider do Combo Hexa
+const autoSlider=document.querySelector('.combo-hexa .combo-slider');
+if(autoSlider && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const slidesA=autoSlider.querySelectorAll('.slide');
+  const gapA=parseInt(getComputedStyle(autoSlider).columnGap)||10;
+  const stepW=()=>slidesA[0].offsetWidth+gapA;
+  let idxA=0,timer=null,resumeT=null;
+  const step=()=>{
+    idxA=(idxA+1)%slidesA.length;
+    autoSlider.scrollTo({left:idxA*stepW(),behavior:'smooth'});
+  };
+  const start=()=>{if(!timer)timer=setInterval(step,2600);};
+  const stop=()=>{clearInterval(timer);timer=null;};
+  ['pointerdown','touchstart'].forEach(ev=>autoSlider.addEventListener(ev,()=>{
+    stop();clearTimeout(resumeT);
+    resumeT=setTimeout(()=>{idxA=Math.round(autoSlider.scrollLeft/stepW());start();},4000);
+  },{passive:true}));
+  new IntersectionObserver(es=>{es[0].isIntersecting?start():stop();},{threshold:.4}).observe(autoSlider);
+}
 // FAQ
 document.querySelectorAll('.faq-q').forEach(q=>{
   q.addEventListener('click',()=>q.parentElement.classList.toggle('open'));
