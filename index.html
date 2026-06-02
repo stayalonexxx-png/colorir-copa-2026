@@ -574,17 +574,6 @@ const obs=new IntersectionObserver((e)=>{
   sticky.classList.toggle('show',!e[0].isIntersecting);
 },{threshold:0,rootMargin:'0px'});
 window.addEventListener('load',()=>obs.observe(document.querySelector('.hero')));
-
-// Rastreamento de checkout (Meta Pixel) — dispara ao clicar em qualquer botão de compra
-document.querySelectorAll('a[href*="pay.cakto.com.br"]').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const isBasico=/3bvta6e/.test(btn.href);
-    const dados=isBasico
-      ? {content_name:'Combo Básico', value:10.90, currency:'BRL'}
-      : {content_name:'Combo Hexa',   value:24.90, currency:'BRL'};
-    if(window.fbq){ fbq('track','InitiateCheckout', dados); }
-  });
-});
 </script>
 </body>
 </html>
